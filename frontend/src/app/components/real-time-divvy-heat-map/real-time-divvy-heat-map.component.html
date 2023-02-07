@@ -1,0 +1,87 @@
+<div>
+    <br>
+    
+  
+    <mat-card>
+      
+      <br>
+      <button mat-raised-button color="primary" routerLink="/heat_map" style="float: right;">
+      Go Back
+      &nbsp; &nbsp; &nbsp;
+      <mat-icon>keyboard_backspace</mat-icon>
+      </button>
+        &nbsp; &nbsp; &nbsp;
+  
+      <br><br>
+      <mat-form-field>
+  
+  
+         <mat-select placeholder="Time Range:"  [(ngModel)]="timeRangeSelected" (ngModelChange)="changeTimeRangeSelected($event.value)">
+           <mat-option *ngFor="let timeValue of timeValues" [value]="timeValue.id">
+             {{timeValue.value}}
+           </mat-option>
+         </mat-select>
+  
+      </mat-form-field>
+      <mat-divider></mat-divider>
+      <br>
+       <div id="floating-panel">
+         {{timeStamp}}
+         </div>
+      <agm-map  [(latitude)]="location.lat" [(longitude)]="location.lng" [(zoom)]="location.zoom" [disableDefaultUI]="true" [zoomControl]="true" (mapReady)="onMapLoad($event)" >
+  
+        <agm-marker
+    (markerClick)="clickedMarker('Union Station', 0)"
+    [latitude]="location.lat"
+    [longitude]="location.lng"
+    [iconUrl]= "icon"
+    [label]="{ color: 'white', text: 'You are Here'}">
+  
+    <agm-info-window #infoWindow>
+      <strong>You are currently here by the Union Station</strong>
+  
+    </agm-info-window>
+    </agm-marker>
+  
+    <agm-marker
+    (markerClick)="clickedMarker('placeSelected', 0)"
+    [latitude]="placeSelected.latitude"
+    [longitude]="placeSelected.longitude"
+    [iconUrl] = "{ url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                  scaledSize: {
+                    width: 40,
+                    height: 60
+                }}" >
+  
+    <agm-info-window #infoWindow>
+      <strong>You have selected this place</strong>
+      <br><br><br>
+      <strong>Name: {{placeSelected.name}}</strong>
+      <br><br>
+      <strong>Phone: {{placeSelected.display_phone}}</strong>
+      <br><br>
+      <strong>Address: {{placeSelected.address1}}</strong>
+    </agm-info-window>
+    </agm-marker>
+
+    <agm-marker
+      *ngFor="let m of markers; let i = index"
+      (markerClick)="clickedMarker(m.stationName, i)"
+      [latitude]="m.latitude"
+      [longitude]="m.longitude"
+      [label]="m.id">
+  
+      <agm-info-window #infoWindow>
+        <strong>Divvy Station</strong>
+        <br><br>
+        <strong>stationName: {{m.stationName}}</strong>
+        <br><br>
+        <strong>status: {{m.status}}</strong>
+        <br><br>
+        <strong>availableDocks: {{m.availableDocks}}</strong>
+      </agm-info-window>
+    </agm-marker>
+  </agm-map>
+    </mat-card>
+  </div>
+  
